@@ -1,0 +1,14 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "email": "admin@example.com",
+      "password": "hashed_9697_end"
+    },
+    {
+      "id": "5343",
+      "email": "surapat_su66@live.rmutl.ac.th",
+      "password": "hashed_55427901234567_end"
+    }
+  ]
+}

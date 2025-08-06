@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Login</h1>
+        <form id="loginForm">
+            <input type="email" name="email" placeholder="Email" required />
+            <input type="password" name="password" placeholder="Password" required />
+            <div class="form-btn-row">
+                <button type="button" id="vulnerableBtn">ทดสอบ Vulnerable</button>
+                <button type="button" id="secureBtn">ทดสอบ Secure</button>
+            </div>
+        </form>
+
+        <div class="code-section">
+            <span class="label-vuln">Code ตัวอย่าง Vulnerable Example</span>
+<pre><code>function loginUser(username, password) {
+  const query = `SELECT * FROM users
+                WHERE username = '${username}'
+                AND password = '${password}'`;
+  return executeQuery(query);
+}</code></pre>
+        </div>
+
+        <div class="code-section">
+            <span class="label-secure">Code ตัวอย่าง Secure Example</span>
+<pre><code>function loginUserSecure(username, password) {
+  const query = `SELECT * FROM users
+                WHERE username = ?
+                AND password = ?`;
+  return executeSecureQuery(query, [username, password]);
+}</code></pre>
+        </div>
+    </div>
+
+    <script>
+    function loginUser(username, password) {
+      const query = `SELECT * FROM users WHERE username = '${username}' AND password = '${password}'`;
+      alert(
+        "❌ ไม่ปลอดภัย (Vulnerable)\n\n" +
+        "Query ที่ถูกสร้าง:\n" +
+        query +
+        "\n\nคำอธิบาย:\n" +
+        "โค้ดนี้ไม่ปลอดภัยเพราะนำค่าที่ผู้ใช้กรอกมาใส่ใน SQL โดยตรง ทำให้เสี่ยงต่อการถูกโจมตีแบบ SQL Injection"
+      );
+    }
+
+    function loginUserSecure(username, password) {
+      const query = `SELECT * FROM users WHERE username = ? AND password = ?`;
+      alert(
+        "✅ ปลอดภัย (Secure)\n\n" +
+        "Query ที่ถูกสร้าง:\n" +
+        query +
+        "\nParameters: " + JSON.stringify([username, password]) +
+        "\n\nคำอธิบาย:\n" +
+        "โค้ดนี้ปลอดภัยกว่าเพราะใช้ parameterized query หรือ prepared statement ป้องกัน SQL Injection"
+      );
+    }
+
+    document.getElementById('vulnerableBtn').addEventListener('click', function() {
+      const form = document.getElementById('loginForm');
+      const email = form.email.value;
+      const password = form.password.value;
+      loginUser(email, password);
+    });
+
+    document.getElementById('secureBtn').addEventListener('click', function() {
+      const form = document.getElementById('loginForm');
+      const email = form.email.value;
+      const password = form.password.value;
+      loginUserSecure(email, password);
+    });
+    </script>
+    <script src="db.js"></script>
+</body>
+</html>
